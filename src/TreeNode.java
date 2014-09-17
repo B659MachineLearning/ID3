@@ -8,7 +8,7 @@ public class TreeNode {
 	private double entropy;
 	private int testAttribute;
 	private int testValue;
-	private int leafAttribute;
+	private int leafAttribute[];
 	
 	public TreeNode(){
 		this.parent = null;
@@ -16,6 +16,7 @@ public class TreeNode {
 		this.records = new ArrayList<ArrayList<String>>();
 		this.entropy = 0.0;
 		this.testAttribute = 0;
+		this.leafAttribute = new int[]{-1, -1};
 	}
 	
 	public void setParent(TreeNode parent){
@@ -58,20 +59,20 @@ public class TreeNode {
 		return this.testAttribute;
 	}
 	
-	public void setLeafAttribute(int attr){
-		this.leafAttribute = attr;
+	public void setLeafAttribute(int attr, int branch){
+		this.leafAttribute[branch] = attr;
 	}
 	
-	public int getLeafAttribute(){
+	public int[] getLeafAttribute(){
 		return this.leafAttribute;
 	}
 	
 	public void setTestValue(int value){
-		this.leafAttribute = value;
+		this.testValue = value;
 	}
 	
 	public int getTestValue(){
-		return this.leafAttribute;
+		return this.testValue;
 	}
 	
 }

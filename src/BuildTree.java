@@ -3,10 +3,9 @@ import java.util.ArrayList;
 
 public class BuildTree {
 
-	public TreeNode constructTree(ArrayList<ArrayList<String>> records, TreeNode root){
+	public TreeNode constructTree(ArrayList<ArrayList<String>> records, TreeNode root, int localDepth){
 		int bestAttribute = -1;
-		double bestGain = 0;
-		
+		double bestGain = 0;		
 		
 		root.setEntropy(Entropy.entropyCal(root.getRecords()));
 		System.out.println("RootEn: "+root.getEntropy()+  "    size ="+root.getRecords().size());
@@ -14,10 +13,10 @@ public class BuildTree {
 		
 		if(root.getEntropy() == 0){
 			if(root.getRecords().size() > 0)
-				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)));
+				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
 			else
 				System.out.println("0 records classified for :"+root.getParent());
-			    System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute());
+			System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute());
 			//System.out.println("Children : "+root.getChildren().toString());
 			return root;	
 		}
@@ -86,17 +85,16 @@ public class BuildTree {
 //			if(root.getChildren() != null)
 //				System.out.println("*Children 0:"+root.getChildren()[0].getTestAttribute());
 //				System.out.println("*Children 1:"+root.getChildren()[1].getTestAttribute());
-			
-			for (int j = 0; j < setSize; j++) {
-				//if(ID3.depth != 0){
-				//	ID3.depth--;
-					constructTree(root.children[j].getRecords(), root.children[j]);
-				//}
+			if(localDepth != 0){
+				localDepth--;
+				for (int j = 0; j < setSize; j++) {
+						constructTree(root.children[j].getRecords(), root.children[j], localDepth);
+					}
 			
 			}
 
 			root.setRecords(null);
-		}
+		} 
 		else {
 			return root;
 		}
