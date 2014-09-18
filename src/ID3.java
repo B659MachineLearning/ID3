@@ -38,15 +38,22 @@ public class ID3 {
 		
 		assignLeaves(root);
 		
+		System.out.println("---------------------------------");
+		System.out.println("Tree for Depth "+depth+" : \n---------------------------------");
 		printTree(root);
+		System.out.println("--------------------------------");
 		
 		String testFilePath = Config.readConfig("testFileName");
 		test_records = DataLoader.readRecords(testFilePath);
-		//System.out.println("Test Record : "+records.get(60));
+		System.out.println("Test Report : \n--------------------------------");
 		for(int i =0 ; i<test_records.size(); i++){
 			traverseTree(test_records.get(i), root);
 		}
+		System.out.println("======================================");
 		System.out.println(count+" Correct predictions out of "+test_records.size());
+		System.out.println("======================================");
+		double accuracy = ((double)count/(double)test_records.size())*100;
+		System.out.println("Accuracy for Depth "+depth+" : "+accuracy+"%");
 		return;
 	}
 	
@@ -79,20 +86,20 @@ public class ID3 {
 		
 		if(root.getTestValue() == 0){
 			if(root.getTestAttribute() >=0)
-				System.out.println("0 -- "+DataLoader.labels.get(root.getTestAttribute()));
+				System.out.println("0 -- Class "+DataLoader.labels.get(root.getTestAttribute()));
 
 			if(root.getLeafAttribute()[0] != -1)
-				System.out.println("Leaf 0 -- "+root.getLeafAttribute()[0]);
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
 			if(root.getLeafAttribute()[1] != -1)
-				System.out.println("Leaf 1 -- "+root.getLeafAttribute()[1]);
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
 		}
 		else{
 			if(root.getTestAttribute() >=0)
 				System.out.println("1 -- "+DataLoader.labels.get(root.getTestAttribute()));
 			if(root.getLeafAttribute()[0] != -1)
-				System.out.println("Leaf 0 -- "+root.getLeafAttribute()[0]);
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
 			if(root.getLeafAttribute()[1] != -1)
-				System.out.println("Leaf 1 -- "+root.getLeafAttribute()[1]);
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
 		}
 		
 		if(root.children != null){
