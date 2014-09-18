@@ -8,15 +8,17 @@ public class BuildTree {
 		double bestGain = 0;		
 		
 		root.setEntropy(Entropy.entropyCal(root.getRecords()));
-		System.out.println("RootEn: "+root.getEntropy()+  "    size ="+root.getRecords().size());
+		//debug
+		//System.out.println("RootEn: "+root.getEntropy()+  "    size ="+root.getRecords().size());
 		
 		
-		if(root.getEntropy() == 0){
+		if(root.getEntropy() == 0.0){
 			if(root.getRecords().size() > 0)
 				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
 			else
 				System.out.println("0 records classified for :"+root.getParent());
-			System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute());
+			//debug
+			//System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute()[root.getTestValue()]);
 			//System.out.println("Children : "+root.getChildren().toString());
 			return root;	
 		}
@@ -53,6 +55,8 @@ public class BuildTree {
 				if(i==flag){
 					System.out.println("Gain : "+ gain);
 				}
+				
+				//debug
 				//System.out.println("Gain "+i+" value : "+gain);
 				if(gain > bestGain) {
 					bestAttribute = i;
@@ -60,9 +64,10 @@ public class BuildTree {
 				}
 			}
           }
-		System.out.println("Best Gain:"+bestGain);
-		System.out.println("Best Attribute:"+bestAttribute);
-		System.out.println("Attribute Name:"+DataLoader.labels.get(bestAttribute));
+		//debug
+		//System.out.println("Best Gain:"+bestGain);
+		//System.out.println("Best Attribute:"+bestAttribute);
+		//System.out.println("Attribute Name:"+DataLoader.labels.get(bestAttribute));
 		
 		if(bestAttribute != -1) {
 			int setSize = Integer.parseInt(Config.readConfig("setSizeOfChild"));
@@ -75,7 +80,8 @@ public class BuildTree {
 				root.children[j] = new TreeNode();
 				root.children[j].setParent(root);
 				root.children[j].setRecords(subset(root, bestAttribute, j));
-				System.out.println("subset of "+j+"  :"+root.children[j].getRecords().size());
+				//debug
+				//System.out.println("subset of "+j+"  :"+root.children[j].getRecords().size());
 				root.children[j].setTestValue(j);
 				//root.children[j].getTestAttribute().setName(Hw1.getLeafNames(bestAttribute, j));
 				//root.children[j].setTestAttribute(bestAttribute);
@@ -87,12 +93,10 @@ public class BuildTree {
 //				System.out.println("*Children 1:"+root.getChildren()[1].getTestAttribute());
 			if(localDepth != 0){
 				localDepth--;
-				for (int j = 0; j < setSize; j++) {
-						constructTree(root.children[j].getRecords(), root.children[j], localDepth);
-					}
-			
+				for(int j = 0; j < setSize; j++) {
+					constructTree(root.children[j].getRecords(), root.children[j], localDepth);
+				}
 			}
-
 			root.setRecords(null);
 		} 
 		else {

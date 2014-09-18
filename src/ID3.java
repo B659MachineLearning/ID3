@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 
 public class ID3 {
@@ -12,77 +9,109 @@ public class ID3 {
 	 public static ArrayList<Integer> usedAttributes = new ArrayList<Integer>();
 	 public static int count = 0;
 	 public static int depth = 0;
+	 
+	 public static Boolean printTree = true;
 	  
-public static void main(String args[]) {
-	 
-	 ArrayList<ArrayList<String>> records = new ArrayList<ArrayList<String>>();
-	 ArrayList<ArrayList<String>> test_records = new ArrayList<ArrayList<String>>();
-	 BuildTree t = new BuildTree();
-	 
-	 depth = Integer.parseInt(Config.readConfig("depth"));
-	
-	 //Read the data in CSV file with attributes and examples
-	 String trainFilePath = Config.readConfig("trainFileName"); 
-	 records = DataLoader.readRecords(trainFilePath);
-	 
-	 System.out.println("Data Set : "+records.toString());
-	 System.out.println("Number of examples : "+(records.size()-1));
-	 
-	 TreeNode root = new TreeNode();
-	
-	for(ArrayList<String> record : records) {
-		root.getRecords().add(record);
-	}
-	
-	t.constructTree(records, root, depth);
-	
-	assignLeaves(root);
-	
-	String testFilePath = Config.readConfig("testFileName");
-	test_records = DataLoader.readRecords(testFilePath);
-	//System.out.println("Test Record : "+records.get(60));
-	for(int i =0 ; i<test_records.size(); i++){
-		traverseTree(test_records.get(i), root);
-	}
-	System.out.println(count+" Correct predictions out of "+test_records.size());
-	return;
-	
+	 public static void main(String args[]) {
+
+		ArrayList<ArrayList<String>> records = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> test_records = new ArrayList<ArrayList<String>>();
+		BuildTree t = new BuildTree();
+		 
+		depth = Integer.parseInt(Config.readConfig("depth"));
 		
+		//Read the data in CSV file with attributes and examples
+		String trainFilePath = Config.readConfig("trainFileName"); 
+		records = DataLoader.readRecords(trainFilePath);
+		 
+		//System.out.println("Data Set : "+records.toString());
+		System.out.println("Number of examples : "+(records.size()-1));
+		System.out.println("Lables : "+DataLoader.labels.toString());
+		
+		TreeNode root = new TreeNode();
+		
+		for(ArrayList<String> record : records) {
+			root.getRecords().add(record);
+		}
+		
+		t.constructTree(records, root, depth);
+		
+		assignLeaves(root);
+		
+		printTree(root);
+		
+		String testFilePath = Config.readConfig("testFileName");
+		test_records = DataLoader.readRecords(testFilePath);
+		//System.out.println("Test Record : "+records.get(60));
+		for(int i =0 ; i<test_records.size(); i++){
+			traverseTree(test_records.get(i), root);
+		}
+		System.out.println(count+" Correct predictions out of "+test_records.size());
+		return;
 	}
 	
 	public static void traverseTree(ArrayList<String> r, TreeNode root) {
 		
-		int testAttr = root.getTestAttribute();
+		int testAttr = root.getTestAttribute() >= 0 ? root.getTestAttribute() : 0;
 		int inputAttr = Integer.parseInt(r.get(testAttr));
 		//System.out.println("testAttr : "+testAttr+" inputAttr : "+inputAttr);
-		if(root.getChildren() != null)
+		if(root.getChildren() != null){
+			//System.out.println(" visited : "+DataLoader.labels.get(root.getTestAttribute()));
 			traverseTree(r, root.getChildren()[inputAttr]);
+		}
 		
 		if(root.children == null){
 			ArrayList<String> rec = root.getRecords().get(0);
 			int leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
-			System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
+			//debug
+			//System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
 			if(Integer.parseInt(r.get(16))==root.getLeafAttribute()[leafBranch])
 				count++;
 			else
-				System.out.println("Incorrect Prediction for "+r.toString());
+				System.out.println("Incorrect Prediction for "+r.toString()+" Predicted value : "+root.getLeafAttribute()[leafBranch]);
 		}
 		
 		return;
 		
 	}
 	
+	public static void printTree(TreeNode root){
+		
+		if(root.getTestValue() == 0){
+			if(root.getTestAttribute() >=0)
+				System.out.println("0 -- "+DataLoader.labels.get(root.getTestAttribute()));
+
+			if(root.getLeafAttribute()[0] != -1)
+				System.out.println("Leaf 0 -- "+root.getLeafAttribute()[0]);
+			if(root.getLeafAttribute()[1] != -1)
+				System.out.println("Leaf 1 -- "+root.getLeafAttribute()[1]);
+		}
+		else{
+			if(root.getTestAttribute() >=0)
+				System.out.println("1 -- "+DataLoader.labels.get(root.getTestAttribute()));
+			if(root.getLeafAttribute()[0] != -1)
+				System.out.println("Leaf 0 -- "+root.getLeafAttribute()[0]);
+			if(root.getLeafAttribute()[1] != -1)
+				System.out.println("Leaf 1 -- "+root.getLeafAttribute()[1]);
+		}
+		
+		if(root.children != null){
+			printTree(root.children[0]);
+			printTree(root.children[1]);
+		}
+	}
+	
+	
 	public static void assignLeaves(TreeNode root){
 		
-		String key;
-		int value;
+		String key;		
 		
 		if(root.children != null){
 			assignLeaves(root.children[0]);
 			assignLeaves(root.children[1]);
 		}
 		else{
-			System.out.println("Branch : "+root.getTestValue());
+			//System.out.println("Branch : "+root.getTestValue());
 			HashMap<String, Integer> counts = new HashMap<String, Integer>();
 			ArrayList<ArrayList<String>> records = root.getRecords();
 			for(int j = 0; j<records.size(); j++){
@@ -101,25 +130,25 @@ public static void main(String args[]) {
 					maxKey = Integer.parseInt(itr.getKey()); 
 			}
 			root.setLeafAttribute(maxKey, root.getTestValue());
-			System.out.println("Possible predictions : "+counts.toString());
+			//System.out.println("Possible predictions : "+counts.toString());
 			
 		}
 		return;	
 	}
 	 
-	 public static boolean isAttributeUsed(int attribute) {
-			if(usedAttributes.contains(attribute)) {
-				return true;
-			}
-			else {
-				return false;
-			}
+	public static boolean isAttributeUsed(int attribute) {
+		if(usedAttributes.contains(attribute)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	 
+ 
 	 public static int setSize(String set) {
-			if(set.equalsIgnoreCase("type")) {
-				return 8;
-			}
-			return 0;
-	}
+		if(set.equalsIgnoreCase("type")) {
+			return 8;
+		}
+		return 0;
+	 }
 }

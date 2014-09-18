@@ -15,7 +15,7 @@ public class TreeNode {
 		this.children = null;
 		this.records = new ArrayList<ArrayList<String>>();
 		this.entropy = 0.0;
-		this.testAttribute = 0;
+		this.testAttribute = -1;
 		this.leafAttribute = new int[]{-1, -1};
 	}
 	

@@ -26,13 +26,16 @@ public class DataLoader {
            // read the first record of the file
            String line;
            int numberOfFeatures;
+           String currLable;
            ArrayList<String> r = null;
            
            line = reader.readLine();
            StringTokenizer st = new StringTokenizer(line, ",");
            numberOfFeatures = st.countTokens();
            for(int i = 0; i<numberOfFeatures; i++){
-        	   labels.add(st.nextToken());
+        	   currLable = st.nextToken();
+        	   if(labels.size()<numberOfFeatures)
+        		   labels.add(currLable);
            }
            //labelsname.add(labels);
            while ((line = reader.readLine()) != null) {
@@ -47,7 +50,8 @@ public class DataLoader {
         catch(Exception e){
         	e.printStackTrace();
         }
-        System.out.println("Lables : "+labels.toString());
+        //debug
+        //System.out.println("Lables : "+labels.toString());
 		return records;  
     }
            
