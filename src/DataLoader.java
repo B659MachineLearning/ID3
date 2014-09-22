@@ -51,7 +51,7 @@ public class DataLoader {
                }
                records.add(r);
            }
-           System.out.println("Categorical Feature : "+catFeatures.toString());
+           System.out.println("Categorical Feature list: "+catFeatures.toString());
         }
         catch(Exception e){
         	e.printStackTrace();
