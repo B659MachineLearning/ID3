@@ -7,7 +7,7 @@ public class TreeNode {
 	public ArrayList<ArrayList<String>> records;
 	private double entropy;
 	private int testAttribute;
-	private int testValue;
+	private String testValue;
 	private int leafAttribute[];
 	
 	public TreeNode(){
@@ -60,6 +60,9 @@ public class TreeNode {
 	}
 	
 	public void setLeafAttribute(int attr, int branch){
+		System.out.println("=====================================================================================================");
+		System.out.println("Setting Leaf for node with parent :"+this.parent.getTestAttribute()+" for branch "+branch+" as "+attr);
+		System.out.println("=====================================================================================================");
 		this.leafAttribute[branch] = attr;
 	}
 	
@@ -67,11 +70,11 @@ public class TreeNode {
 		return this.leafAttribute;
 	}
 	
-	public void setTestValue(int value){
+	public void setTestValue(String value){
 		this.testValue = value;
 	}
 	
-	public int getTestValue(){
+	public String getTestValue(){
 		return this.testValue;
 	}
 	

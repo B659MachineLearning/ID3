@@ -36,7 +36,7 @@ public class ID3 {
 		
 		t.constructTree(records, root, depth);
 		
-		assignLeaves(root);
+		//assignLeaves(root);
 		
 		System.out.println("---------------------------------");
 		System.out.println("Tree for Depth "+depth+" : \n---------------------------------");
@@ -68,8 +68,16 @@ public class ID3 {
 		}
 		
 		if(root.children == null){
+			System.out.println("Record under test : "+r.toString());
 			ArrayList<String> rec = root.getRecords().get(0);
-			int leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
+			int leafBranch = 3;
+			if(root.getParent().getTestAttribute() == 12 && !root.getTestValue().equalsIgnoreCase("Rest"))
+				leafBranch = 0;
+			else if(root.getParent().getTestAttribute() == 12 && root.getTestValue().equalsIgnoreCase("Rest"))
+				leafBranch = 1;
+			else
+				leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
+			
 			//debug
 			//System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
 			if(Integer.parseInt(r.get(16))==root.getLeafAttribute()[leafBranch])
@@ -84,9 +92,9 @@ public class ID3 {
 	
 	public static void printTree(TreeNode root){
 		
-		if(root.getTestValue() == 0){
+		if(root.getTestValue() == null || root.getTestValue().equalsIgnoreCase("0") && !root.getTestValue().equalsIgnoreCase("Rest")){
 			if(root.getTestAttribute() >=0)
-				System.out.println("0 -- Class "+DataLoader.labels.get(root.getTestAttribute()));
+				System.out.println("0 -- "+DataLoader.labels.get(root.getTestAttribute()));
 
 			if(root.getLeafAttribute()[0] != -1)
 				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
@@ -136,7 +144,7 @@ public class ID3 {
 				if(itr.getValue() == maxValue)
 					maxKey = Integer.parseInt(itr.getKey()); 
 			}
-			root.setLeafAttribute(maxKey, root.getTestValue());
+			root.setLeafAttribute(maxKey, Integer.parseInt(root.getTestValue()));
 			//System.out.println("Possible predictions : "+counts.toString());
 			
 		}
