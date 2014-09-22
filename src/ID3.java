@@ -10,6 +10,7 @@ public class ID3 {
 	 public static int count = 0;
 	 public static int depth = 0;
 	 public static int indexOfClassLabel;
+	 public static String classLabel = Config.readConfig("classLable"); 
 	 public static Boolean printTree = true;
 	  
 	 public static void main(String args[]) {
@@ -29,13 +30,8 @@ public class ID3 {
 		System.out.println("Lables : "+DataLoader.labels.toString());
 		
 		//Index of classLabel
-		String classLabel = Config.readConfig("classLable"); 
-		for (int index= 0 ; index < DataLoader.labels.size(); index++){
-			if (DataLoader.labels.get(index).equalsIgnoreCase(classLabel)){
-				indexOfClassLabel = index;
-				break;
-			}
-		}
+		indexOfClassLabel = DataLoader.labels.indexOf(classLabel);
+		
 		
 		TreeNode root = new TreeNode();
 		
@@ -77,16 +73,8 @@ public class ID3 {
 		}
 		
 		if(root.children == null){
-			System.out.println("Record under test : "+r.toString());
 			ArrayList<String> rec = root.getRecords().get(0);
-			int leafBranch = 3;
-			if(DataLoader.catFeatures.contains(root.getParent().getTestAttribute()) && !root.getTestValue().equalsIgnoreCase("Rest"))
-				leafBranch = 0;
-			else if(DataLoader.catFeatures.contains(root.getParent().getTestAttribute()) && root.getTestValue().equalsIgnoreCase("Rest"))
-				leafBranch = 1;
-			else
-				leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
-			
+			int leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
 			//debug
 			//System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
 			
@@ -101,37 +89,23 @@ public class ID3 {
 	}
 	
 	public static void printTree(TreeNode root){
-		Boolean isCategorical = false;
-		if(root.getChildren() == null)
-			isCategorical = DataLoader.catFeatures.contains(root.getParent().getTestAttribute());
 		
-		if(root.getTestValue() == null || root.getTestValue().equalsIgnoreCase("0") && !root.getTestValue().equalsIgnoreCase("Rest")){
+		if(root.getTestValue() == 0){
 			if(root.getTestAttribute() >=0)
-				System.out.println("0 -- "+DataLoader.labels.get(root.getTestAttribute()));
+				System.out.println("0 -- Class "+DataLoader.labels.get(root.getTestAttribute()));
+
 			if(root.getLeafAttribute()[0] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" = "+root.getParent().getTestValue()+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
 			if(root.getLeafAttribute()[1] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" != "+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
 		}
 		else{
 			if(root.getTestAttribute() >=0)
 				System.out.println("1 -- "+DataLoader.labels.get(root.getTestAttribute()));
 			if(root.getLeafAttribute()[0] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" = "+root.getParent().getTestValue()+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-				else
-				 System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
 			if(root.getLeafAttribute()[1] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" != "+root.getParent().getTestValue()+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
+				System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
 		}
 		
 		if(root.children != null){
@@ -168,7 +142,7 @@ public class ID3 {
 				if(itr.getValue() == maxValue)
 					maxKey = Integer.parseInt(itr.getKey()); 
 			}
-			root.setLeafAttribute(maxKey, Integer.parseInt(root.getTestValue()));
+			root.setLeafAttribute(maxKey, root.getTestValue());
 			//System.out.println("Possible predictions : "+counts.toString());
 			
 		}

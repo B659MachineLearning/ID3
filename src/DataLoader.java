@@ -13,8 +13,8 @@ import java.util.StringTokenizer;
 public class DataLoader {
 	//public static final String FILE_PATH = "zoo-train.csv";
     //public static ArrayList<ArrayList<String>> labelsname = new ArrayList<ArrayList<String>>();
+	public static int numberOfFeatures;
     public static ArrayList<String> labels = new ArrayList<String>();
-    public static ArrayList<Integer> catFeatures = new ArrayList<Integer>();
     public static ArrayList<ArrayList<String>> readRecords(String FILE_PATH){
 		BufferedReader reader = null;
 		ArrayList<ArrayList<String>> records = new ArrayList<ArrayList<String>>();
@@ -26,9 +26,8 @@ public class DataLoader {
            
            // read the first record of the file
            String line;
-           int numberOfFeatures;
+           
            String currLable;
-           String currFeature;
            ArrayList<String> r = null;
            
            line = reader.readLine();
@@ -44,18 +43,11 @@ public class DataLoader {
                st = new StringTokenizer(line, ",");
                r = new ArrayList<String>();
                for(int i = 0; i<numberOfFeatures; i++){
-            	   currFeature = st.nextToken();
-            	   if(Integer.parseInt(currFeature)>1 && !catFeatures.contains(i))
-            		   catFeatures.add(i);
-            	   r.add(currFeature);
+            	   r.add(st.nextToken());
                }
                records.add(r);
            }
-<<<<<<< HEAD
            reader.close();
-=======
-           System.out.println("Categorical Feature names : "+catFeatures.toString());
->>>>>>> master
         }
         catch(Exception e){
         	e.printStackTrace();
