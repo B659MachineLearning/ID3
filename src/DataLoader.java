@@ -14,6 +14,7 @@ public class DataLoader {
 	//public static final String FILE_PATH = "zoo-train.csv";
     //public static ArrayList<ArrayList<String>> labelsname = new ArrayList<ArrayList<String>>();
     public static ArrayList<String> labels = new ArrayList<String>();
+    public static ArrayList<Integer> catFeatures = new ArrayList<Integer>();
     public static ArrayList<ArrayList<String>> readRecords(String FILE_PATH){
 		BufferedReader reader = null;
 		ArrayList<ArrayList<String>> records = new ArrayList<ArrayList<String>>();
@@ -27,6 +28,7 @@ public class DataLoader {
            String line;
            int numberOfFeatures;
            String currLable;
+           String currFeature;
            ArrayList<String> r = null;
            
            line = reader.readLine();
@@ -42,10 +44,14 @@ public class DataLoader {
                st = new StringTokenizer(line, ",");
                r = new ArrayList<String>();
                for(int i = 0; i<numberOfFeatures; i++){
-            	   r.add(st.nextToken());
+            	   currFeature = st.nextToken();
+            	   if(Integer.parseInt(currFeature)>1 && !catFeatures.contains(i))
+            		   catFeatures.add(i);
+            	   r.add(currFeature);
                }
                records.add(r);
            }
+           System.out.println("Categorical Features : "+catFeatures.toString());
         }
         catch(Exception e){
         	e.printStackTrace();

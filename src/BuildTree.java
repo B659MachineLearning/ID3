@@ -41,9 +41,7 @@ public class BuildTree {
 		double gain = 0;
 		for(int i = 0; i < ID3.NUM_ATTRS - 2; i++) {		
 			if(!ID3.isAttributeUsed(i)) {
-				
-				
-				if(i == 12){
+				if(DataLoader.catFeatures.contains(i)){
 					for(int k = 0; k < values.size(); k++){
 						double entropy = 0;
 						ArrayList<Double> entropies = new ArrayList<Double>();
@@ -149,7 +147,7 @@ public class BuildTree {
 			root.setTestAttribute(bestAttribute);
 			root.children = new TreeNode[setSize];
 			//root.setUsed(true);
-			if(bestAttribute == 12){
+			if(DataLoader.catFeatures.contains(bestAttribute)){
 				values.remove(values.indexOf(currBest));
 				if(values.isEmpty())
 					ID3.usedAttributes.add(bestAttribute);
