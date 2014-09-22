@@ -9,7 +9,7 @@ public class ID3 {
 	 public static ArrayList<Integer> usedAttributes = new ArrayList<Integer>();
 	 public static int count = 0;
 	 public static int depth = 0;
-	 public static int indexOfClassLabel;
+	 
 	 public static Boolean printTree = true;
 	  
 	 public static void main(String args[]) {
@@ -27,15 +27,6 @@ public class ID3 {
 		//System.out.println("Data Set : "+records.toString());
 		System.out.println("Number of examples : "+(records.size()-1));
 		System.out.println("Lables : "+DataLoader.labels.toString());
-		
-		//Index of classLabel
-		String classLabel = Config.readConfig("classLable"); 
-		for (int index= 0 ; index < DataLoader.labels.size(); index++){
-			if (DataLoader.labels.get(index).equalsIgnoreCase(classLabel)){
-				indexOfClassLabel = index;
-				break;
-			}
-		}
 		
 		TreeNode root = new TreeNode();
 		
@@ -74,8 +65,7 @@ public class ID3 {
 			int leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
 			//debug
 			//System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
-			
-			if(Integer.parseInt(r.get(indexOfClassLabel))==root.getLeafAttribute()[leafBranch])
+			if(Integer.parseInt(r.get(16))==root.getLeafAttribute()[leafBranch])
 				count++;
 			else
 				System.out.println("Incorrect Prediction for "+r.toString()+" Predicted value : "+root.getLeafAttribute()[leafBranch]);
@@ -125,7 +115,7 @@ public class ID3 {
 			HashMap<String, Integer> counts = new HashMap<String, Integer>();
 			ArrayList<ArrayList<String>> records = root.getRecords();
 			for(int j = 0; j<records.size(); j++){
-				key = records.get(j).get(indexOfClassLabel);
+				key = records.get(j).get(16);
 				if(!counts.containsKey(key)){
 					counts.put(key, 1);
 				}

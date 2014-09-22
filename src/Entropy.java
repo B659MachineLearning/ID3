@@ -14,7 +14,7 @@ public class Entropy {
 			for(int j = 0; j < records.size(); j++) {
 				ArrayList<String> record = records.get(j);
 				
-				if(Integer.parseInt(record.get(16)) == i) {
+				if(Integer.parseInt(record.get(ID3.indexOfClassLabel)) == i) {
 					count++;
 				}
 			}

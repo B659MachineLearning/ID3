@@ -46,6 +46,7 @@ public class DataLoader {
                }
                records.add(r);
            }
+           reader.close();
         }
         catch(Exception e){
         	e.printStackTrace();

@@ -14,7 +14,7 @@ public class BuildTree {
 		
 		if(root.getEntropy() == 0.0){
 			if(root.getRecords().size() > 0)
-				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
+				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(ID3.indexOfClassLabel)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
 			else
 				System.out.println("0 records classified for :"+root.getParent());
 			//debug
@@ -23,7 +23,7 @@ public class BuildTree {
 			return root;	
 		}
 		int flag = 99;
-		for(int i = 0; i < ID3.NUM_ATTRS - 2; i++) {		
+		for(int i = 0; i < ID3.indexOfClassLabel; i++) {		
 			if(!ID3.isAttributeUsed(i)) {
 				double entropy = 0;
 				ArrayList<Double> entropies = new ArrayList<Double>();
