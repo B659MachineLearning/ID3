@@ -9,6 +9,8 @@ public class ID3 {
 	 public static ArrayList<Integer> usedAttributes = new ArrayList<Integer>();
 	 public static int count = 0;
 	 public static int depth = 0;
+	 public static int indexOfClassLabel;
+	 public static String classLabel = Config.readConfig("classLable"); 
 	 
 	 public static Boolean printTree = true;
 	  
@@ -27,6 +29,9 @@ public class ID3 {
 		//System.out.println("Data Set : "+records.toString());
 		System.out.println("Number of examples : "+(records.size()-1));
 		System.out.println("Lables : "+DataLoader.labels.toString());
+		
+		//Index of classLabel
+		indexOfClassLabel = DataLoader.labels.indexOf(classLabel);
 		
 		TreeNode root = new TreeNode();
 		
@@ -158,7 +163,10 @@ public class ID3 {
 				if(itr.getValue() == maxValue)
 					maxKey = Integer.parseInt(itr.getKey()); 
 			}
-			root.setLeafAttribute(maxKey, Integer.parseInt(root.getTestValue()));
+			if(root.getTestValue().equalsIgnoreCase("Rest"))
+				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(ID3.indexOfClassLabel)), 1);
+			else
+				root.setLeafAttribute(maxKey, Integer.parseInt(root.getTestValue()));
 			//System.out.println("Possible predictions : "+counts.toString());
 			
 		}

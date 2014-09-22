@@ -9,7 +9,7 @@ public class Entropy {
 			// nothing to do
 			return 0;
 		}
-		for(int i = 1; i < ID3.setSize("type"); i++) {
+		for(int i = 1; i < ID3.setSize(ID3.classLabel); i++) {
 			int count = 0;
 			for(int j = 0; j < records.size(); j++) {
 				ArrayList<String> record = records.get(j);

@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 public class DataLoader {
 	//public static final String FILE_PATH = "zoo-train.csv";
     //public static ArrayList<ArrayList<String>> labelsname = new ArrayList<ArrayList<String>>();
+	public static int numberOfFeatures;
     public static ArrayList<String> labels = new ArrayList<String>();
     public static ArrayList<Integer> catFeatures = new ArrayList<Integer>();
     public static ArrayList<ArrayList<String>> readRecords(String FILE_PATH){
@@ -26,7 +27,6 @@ public class DataLoader {
            
            // read the first record of the file
            String line;
-           int numberOfFeatures;
            String currLable;
            String currFeature;
            ArrayList<String> r = null;

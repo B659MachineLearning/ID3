@@ -26,9 +26,9 @@ public class BuildTree {
 		if(root.getEntropy() == 0.0){
 			if(root.getRecords().size() > 0){
 				if(root.getTestValue().equalsIgnoreCase("Rest"))
-					root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)), 1);
+					root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(ID3.indexOfClassLabel)), 1);
 				else
-					root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(16)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
+					root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(ID3.indexOfClassLabel)), Integer.parseInt(root.getRecords().get(0).get(root.getParent().getTestAttribute())));
 			}
 			else
 				System.out.println("0 records classified for :"+root.getParent());
