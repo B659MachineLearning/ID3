@@ -13,30 +13,26 @@ public class BuildTree {
 		double gain = 0;
 		
 		ArrayList<Integer> values = null;
-		root.setEntropy(Entropy.entropyCal(root.getRecords()));
-		//debug
-		System.out.println("RootEn: "+root.getEntropy()+  "    size ="+root.getRecords().size());
 		
+		//Calculate Root Entropy for the subset of Tree node passed
+		root.setEntropy(Entropy.entropyCal(root.getRecords()));		
 		
+		//If Root Entropy is 0 then assign leaf attribute to the node.
 		if(root.getEntropy() == 0.0){
 			if(root.getRecords().size() > 0){
 				root.setLeaf();
 				root.setLeafAttribute(root.getRecords().get(0).get(ID3.indexOfClassLabel), 0);
 			}
 			else{
-				System.out.println("0 records classified for :"+root.getParent());
-				
+				System.out.println("0 records classified for :"+root.getParent());	
 			}
-			//debug
-			//System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute()[root.getTestValue()]);
-			//System.out.println("Children : "+root.getChildren().toString());
 			return root;	
 		}
-		
 		int flag = 99;
-		
 		int currVal = 0;
+		//Loop over all features
 		for(int i = 0; i < DataLoader.numberOfFeatures-2; i++) {
+			//Check 
 			if(!ID3.isAttributeUsed(i) && i!=ID3.indexOfClassLabel) {
 				if(DataLoader.catFeatures.contains(i)){
 					values = new ArrayList<Integer>();
