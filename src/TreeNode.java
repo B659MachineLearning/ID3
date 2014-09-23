@@ -7,8 +7,9 @@ public class TreeNode {
 	public ArrayList<ArrayList<String>> records;
 	private double entropy;
 	private int testAttribute;
-	private String testValue;
-	private int leafAttribute[];
+	private String testValue[];
+	private Boolean isLeaf;
+	private String leafAttribute[];
 	
 	public TreeNode(){
 		this.parent = null;
@@ -16,7 +17,9 @@ public class TreeNode {
 		this.records = new ArrayList<ArrayList<String>>();
 		this.entropy = 0.0;
 		this.testAttribute = -1;
-		this.leafAttribute = new int[]{-1, -1};
+		this.leafAttribute = new String[]{"-1", "-1"};
+		this.testValue = new String[]{"NA","NA"};
+		this.isLeaf = false;
 	}
 	
 	public void setParent(TreeNode parent){
@@ -59,23 +62,31 @@ public class TreeNode {
 		return this.testAttribute;
 	}
 	
-	public void setLeafAttribute(int attr, int branch){
+	public void setLeafAttribute(String attr, int branch){
 		System.out.println("=====================================================================================================");
 		System.out.println("Setting Leaf for node with parent :"+this.parent.getTestAttribute()+" for branch "+branch+" as "+attr);
 		System.out.println("=====================================================================================================");
 		this.leafAttribute[branch] = attr;
 	}
 	
-	public int[] getLeafAttribute(){
+	public String[] getLeafAttribute(){
 		return this.leafAttribute;
 	}
 	
-	public void setTestValue(String value){
-		this.testValue = value;
+	public void setTestValue(String value, int branch){
+		this.testValue[branch] = value;
 	}
 	
-	public String getTestValue(){
+	public String[] getTestValue(){
 		return this.testValue;
+	}
+	
+	public void setLeaf(){
+		this.isLeaf = true;
+	}
+	
+	public Boolean isLeaf(){
+		return this.isLeaf;
 	}
 	
 }

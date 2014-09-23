@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 
 public class ID3 {
 	 public static int NUM_ATTRS = 18;
+	 public static int classVals = 0;
+	 public static ArrayList<String> possClasses = new ArrayList<String>();
 	 public static ArrayList<Integer> usedAttributes = new ArrayList<Integer>();
 	 public static int count = 0;
 	 public static int depth = 0;
@@ -39,9 +41,12 @@ public class ID3 {
 			root.getRecords().add(record);
 		}
 		
+		classVals = setSize(classLabel, root);
 		t.constructTree(records, root, depth);
 		
 		assignLeaves(root);
+		
+		//printTree(root);
 		
 		System.out.println("---------------------------------");
 		System.out.println("Tree for Depth "+depth+" : \n---------------------------------");
@@ -59,80 +64,53 @@ public class ID3 {
 		System.out.println("======================================");
 		double accuracy = ((double)count/(double)test_records.size())*100;
 		System.out.println("Accuracy for Depth "+depth+" : "+accuracy+"%");
+		
 		return;
 	}
 	
 	public static void traverseTree(ArrayList<String> r, TreeNode root) {
-		
-		int testAttr = root.getTestAttribute() >= 0 ? root.getTestAttribute() : 0;
-		int inputAttr = Integer.parseInt(r.get(testAttr));
-		//System.out.println("testAttr : "+testAttr+" inputAttr : "+inputAttr);
-		if(root.getChildren() != null){
-			//System.out.println(" visited : "+DataLoader.labels.get(root.getTestAttribute()));
-			traverseTree(r, root.getChildren()[inputAttr]);
-		}
-		
-		if(root.children == null){
-			System.out.println("Record under test : "+r.toString());
-			ArrayList<String> rec = root.getRecords().get(0);
-			int leafBranch = 3;
-			if(DataLoader.catFeatures.contains(root.getParent().getTestAttribute()) && !root.getTestValue().equalsIgnoreCase("Rest"))
-				leafBranch = 0;
-			else if(DataLoader.catFeatures.contains(root.getParent().getTestAttribute()) && root.getTestValue().equalsIgnoreCase("Rest"))
-				leafBranch = 1;
-			else
-				leafBranch = Integer.parseInt(rec.get(root.getParent().getTestAttribute()));
-			
+		if(root.isLeaf()){
+			//System.out.println("Record under test : "+r.toString());
 			//debug
-			//System.out.println("Prediction : "+root.getLeafAttribute()[leafBranch]);
-			if(Integer.parseInt(r.get(16))==root.getLeafAttribute()[leafBranch])
+			//System.out.println("Prediction : "+root.getLeafAttribute()[0]);
+			if(Integer.parseInt(r.get(indexOfClassLabel)) == Integer.parseInt(root.getLeafAttribute()[0]))
 				count++;
-			else
-				System.out.println("Incorrect Prediction for "+r.toString()+" Predicted value : "+root.getLeafAttribute()[leafBranch]);
+			//else
+				//System.out.println("Incorrect Prediction for "+r.toString()+" Predicted value : "+root.getLeafAttribute()[0]);
 		}
+		else{
+			int testAttr = root.getTestAttribute();
+			int inputAttr = Integer.parseInt(r.get(testAttr));
+			//System.out.println("testAttr : "+testAttr+" inputAttr : "+inputAttr);
+			if(root.getChildren() != null){
+				if(inputAttr == Integer.parseInt(root.getTestValue()[0])){
+					traverseTree(r, root.getChildren()[0]);
+				}
+				else{
+					traverseTree(r, root.getChildren()[1]);
+				}
+			}
+		}
+		
 		
 		return;
 		
 	}
 	
+	
 	public static void printTree(TreeNode root){
-		Boolean isCategorical = false;
-		if(root.getChildren() == null)
-			isCategorical = DataLoader.catFeatures.contains(root.getParent().getTestAttribute());
 		
-		if(root.getTestValue() == null || root.getTestValue().equalsIgnoreCase("0") && !root.getTestValue().equalsIgnoreCase("Rest")){
-			if(root.getTestAttribute() >=0)
-				System.out.println("0 -- "+DataLoader.labels.get(root.getTestAttribute()));
-			if(root.getLeafAttribute()[0] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" = "+root.getParent().getTestValue()+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-			if(root.getLeafAttribute()[1] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" != "+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
+		if(!root.isLeaf()){
+			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
+			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
+			printTree(root.getChildren()[0]);
+			printTree(root.getChildren()[1]);
 		}
 		else{
-			if(root.getTestAttribute() >=0)
-				System.out.println("1 -- "+DataLoader.labels.get(root.getTestAttribute()));
-			if(root.getLeafAttribute()[0] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" = "+root.getParent().getTestValue()+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-				else
-				 System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 0 -- Class "+root.getLeafAttribute()[0]+" -- "+root.getRecords().size()+" Examples");
-			if(root.getLeafAttribute()[1] != -1)
-				if(isCategorical)
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" != "+root.getParent().getTestValue()+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
-				else
-					System.out.println(DataLoader.labels.get(root.getParent().getTestAttribute())+" Leaf 1 -- Class "+root.getLeafAttribute()[1]+" -- "+root.getRecords().size()+" Examples");
+			System.out.println("Leaf for :"+getLableName(root.getParent().getTestAttribute())+" : "+root.getRecords().size()+" classes for "+root.getLeafAttribute()[0]);
 		}
-		
-		if(root.children != null){
-			printTree(root.children[0]);
-			printTree(root.children[1]);
-		}
+
+		return;
 	}
 	
 	
@@ -140,39 +118,47 @@ public class ID3 {
 		
 		String key;		
 		
-		if(root.children != null){
-			assignLeaves(root.children[0]);
-			assignLeaves(root.children[1]);
+		if(root.getChildren() != null){
+			assignLeaves(root.getChildren()[0]);
+			assignLeaves(root.getChildren()[1]);
 		}
 		else{
 			//System.out.println("Branch : "+root.getTestValue());
 			HashMap<String, Integer> counts = new HashMap<String, Integer>();
 			ArrayList<ArrayList<String>> records = root.getRecords();
-			for(int j = 0; j<records.size(); j++){
-				key = records.get(j).get(16);
-				if(!counts.containsKey(key)){
-					counts.put(key, 1);
+			if(!records.isEmpty()){
+				for(int j = 0; j<records.size(); j++){
+					key = records.get(j).get(indexOfClassLabel);
+					if(!counts.containsKey(key)){
+						counts.put(key, 1);
+					}
+					else{
+						counts.put(key, counts.get(key)+1);
+					}
 				}
-				else{
-					counts.put(key, counts.get(key)+1);
+				int maxValue = Collections.max(counts.values());
+				int maxKey = -1;
+				for(Entry<String, Integer> itr : counts.entrySet()){
+					if(itr.getValue() == maxValue)
+						maxKey = Integer.parseInt(itr.getKey()); 
 				}
+				root.setLeafAttribute(Integer.toString(maxKey), 0);
+				root.setLeaf();
 			}
-			int maxValue = Collections.max(counts.values());
-			int maxKey = -1;
-			for(Entry<String, Integer> itr : counts.entrySet()){
-				if(itr.getValue() == maxValue)
-					maxKey = Integer.parseInt(itr.getKey()); 
+			else{
+				root.setLeaf();
 			}
-			if(root.getTestValue().equalsIgnoreCase("Rest"))
-				root.setLeafAttribute(Integer.parseInt(root.getRecords().get(0).get(ID3.indexOfClassLabel)), 1);
-			else
-				root.setLeafAttribute(maxKey, Integer.parseInt(root.getTestValue()));
-			//System.out.println("Possible predictions : "+counts.toString());
 			
 		}
 		return;	
 	}
-	 
+	
+	
+	
+	public static String getLableName(int index){
+		return DataLoader.labels.get(index);
+	}
+	
 	public static boolean isAttributeUsed(int attribute) {
 		if(usedAttributes.contains(attribute)) {
 			return true;
@@ -182,10 +168,13 @@ public class ID3 {
 		}
 	}
  
-	 public static int setSize(String set) {
-		if(set.equalsIgnoreCase("type")) {
-			return 8;
-		}
-		return 0;
+	 public static int setSize(String set, TreeNode root) {
+		 String currVal;
+		 for(int m = 0; m< root.getRecords().size(); m++){
+				currVal = root.getRecords().get(m).get(ID3.indexOfClassLabel);
+				if(!possClasses.contains(currVal))
+					possClasses.add(currVal);		
+			}
+		 return possClasses.size();
 	 }
 }

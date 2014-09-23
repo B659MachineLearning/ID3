@@ -9,12 +9,11 @@ public class Entropy {
 			// nothing to do
 			return 0;
 		}
-		for(int i = 1; i < ID3.setSize(ID3.classLabel); i++) {
+		for(int i = 0; i < ID3.classVals; i++) {
 			int count = 0;
 			for(int j = 0; j < records.size(); j++) {
 				ArrayList<String> record = records.get(j);
-				
-				if(Integer.parseInt(record.get(16)) == i) {
+				if(record.get(ID3.indexOfClassLabel).equalsIgnoreCase(ID3.possClasses.get(i))) {
 					count++;
 				}
 			}
