@@ -1,3 +1,10 @@
+/*
+ * Authors : Aniket Bhosale and Mayur Tare
+ * 
+ * Description :
+ * A Java Object to encapsulate Tree node details.
+ */
+
 import java.util.ArrayList;
 
 
@@ -9,7 +16,7 @@ public class TreeNode {
 	private int testAttribute;
 	private String testValue[];
 	private Boolean isLeaf;
-	private String leafAttribute[];
+	private String leafAttribute;
 	
 	public TreeNode(){
 		this.parent = null;
@@ -17,7 +24,7 @@ public class TreeNode {
 		this.records = new ArrayList<ArrayList<String>>();
 		this.entropy = 0.0;
 		this.testAttribute = -1;
-		this.leafAttribute = new String[]{"-1", "-1"};
+		this.leafAttribute = "-1";
 		this.testValue = new String[]{"NA","NA"};
 		this.isLeaf = false;
 	}
@@ -62,14 +69,11 @@ public class TreeNode {
 		return this.testAttribute;
 	}
 	
-	public void setLeafAttribute(String attr, int branch){
-		System.out.println("=====================================================================================================");
-		System.out.println("Setting Leaf for node with parent :"+this.parent.getTestAttribute()+" for branch "+branch+" as "+attr);
-		System.out.println("=====================================================================================================");
-		this.leafAttribute[branch] = attr;
+	public void setLeafAttribute(String attr){
+		this.leafAttribute = attr;
 	}
 	
-	public String[] getLeafAttribute(){
+	public String getLeafAttribute(){
 		return this.leafAttribute;
 	}
 	

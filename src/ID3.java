@@ -1,10 +1,17 @@
+/*
+ * Authors : Aniket Bhosale and Mayur Tare
+ * 
+ * Description :
+ * Class to start the ID3 algorithm.
+ */
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 
-//Class to start the ID3 algorithm
+
 public class ID3 {
 	 public static int classVals = 0;
 	 public static ArrayList<String> possClasses = new ArrayList<String>();

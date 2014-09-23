@@ -1,12 +1,19 @@
+/*
+ * Authors : Aniket Bhosale and Mayur Tare
+ * 
+ * Description :
+ * Class to Calculate Entropy and Information gain required for feature selection in ID3.
+ */
+
 import java.util.ArrayList;
 
-
 public class Entropy {
+	
+	//Calculate Entropy
 	public static double entropyCal(ArrayList<ArrayList<String>> records){
 		double entropy = 0;
 		
 		if(records.size() == 0) {
-			// nothing to do
 			return 0;
 		}
 		for(int i = 0; i < ID3.classVals; i++) {
@@ -19,8 +26,6 @@ public class Entropy {
 			}
 				
 			double probability = count / (double)records.size();
-			//if(i == 1)
-				//System.out.println("count="+ count + "      Recordsize="+records.size());
 			if(count > 0) {
 				entropy += -probability * (Math.log(probability) / Math.log(2));
 			}
@@ -29,6 +34,7 @@ public class Entropy {
 		return entropy;
 	}
 	
+	//Calculate Information Gain
 	public static double calGain(double rootEntropy, ArrayList<Double> subEntropies, ArrayList<Integer> setSizes, int data) {
 		double gain = rootEntropy; 
 		
