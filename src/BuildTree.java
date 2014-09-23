@@ -29,7 +29,7 @@ public class BuildTree {
 		if(root.getEntropy() == 0.0){
 			if(root.getRecords().size() > 0){
 				root.setLeaf();
-				root.setLeafAttribute(root.getRecords().get(0).get(ID3.indexOfClassLabel), 0);
+				root.setLeafAttribute(root.getRecords().get(0).get(ID3.indexOfClassLabel));
 			}
 			else{
 				System.out.println("0 records classified for :"+root.getParent());	

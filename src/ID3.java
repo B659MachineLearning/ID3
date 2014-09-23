@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-
-
 public class ID3 {
 	 public static int classVals = 0;
 	 public static ArrayList<String> possClasses = new ArrayList<String>();
@@ -79,7 +77,7 @@ public class ID3 {
 	public static void traverseTree(ArrayList<String> r, TreeNode root) {
 		if(root.isLeaf()){			
 			int key = Integer.parseInt(r.get(indexOfClassLabel));
-			if(key == Integer.parseInt(root.getLeafAttribute()[0])){
+			if(key == Integer.parseInt(root.getLeafAttribute())){
 				if(!prediction.containsKey(key))
 					prediction.put(key, 1);
 				else
@@ -87,7 +85,7 @@ public class ID3 {
 				count++;
 			}
 			else{
-				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute()[0]);
+				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
 			}
 		
 		}
@@ -116,7 +114,7 @@ public class ID3 {
 			printTree(root.getChildren()[1]);
 		}
 		else{
-			System.out.println("Leaf for :"+getLableName(root.getParent().getTestAttribute())+" : "+root.getRecords().size()+" classes for "+root.getLeafAttribute()[0]);
+			System.out.println("Leaf for :"+getLableName(root.getParent().getTestAttribute())+" : "+root.getRecords().size()+" classes for "+root.getLeafAttribute());
 		}
 
 		return;
@@ -153,7 +151,7 @@ public class ID3 {
 					if(itr.getValue() == maxValue)
 						maxKey = Integer.parseInt(itr.getKey()); 
 				}
-				root.setLeafAttribute(Integer.toString(maxKey), 0);
+				root.setLeafAttribute(Integer.toString(maxKey));
 				root.setLeaf();
 			}
 			else{
