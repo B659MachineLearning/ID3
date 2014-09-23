@@ -53,23 +53,28 @@ public class ID3 {
 		//Assign LeafAttributes to the missed Leaf Nodes 
 		assignLeaves(root);
 		
-		System.out.println("---------------------------------");
-		System.out.println("Tree for Depth "+depth+" : \n---------------------------------");
-		printTree(root);
-		System.out.println("--------------------------------");
-		
 		String testFilePath = Config.readConfig("testFileName");
 		test_records = DataLoader.readRecords(testFilePath);
-		System.out.println("Test Report : \n--------------------------------");
+		
+		//Predict for Test records
 		for(int i =0 ; i<test_records.size(); i++){
 			traverseTree(test_records.get(i), root);
 		}
+		
+		System.out.println("---------------------------------");
+		System.out.println("Tree for Depth "+depth+" : \n---------------------------------");
+		printTree(root, 0);
+		System.out.println("--------------------------------");
+		
+		//Print Test Report
+		System.out.println("Test Report : ");
 		System.out.println("======================================");
 		System.out.println(count+" Correct predictions out of "+test_records.size());
 		System.out.println("Prediction : "+prediction.toString());
 		System.out.println("======================================");
 		double accuracy = ((double)count/(double)test_records.size())*100;
 		System.out.println("Accuracy for Depth "+depth+" : "+accuracy+"%");
+		
 		
 		return;
 	}
@@ -79,16 +84,15 @@ public class ID3 {
 		if(root.isLeaf()){			
 			int key = Integer.parseInt(r.get(indexOfClassLabel));
 			if(key == Integer.parseInt(root.getLeafAttribute())){
-				if(!prediction.containsKey(key))
-					prediction.put(key, 1);
-				else
-					prediction.put(key, prediction.get(key)+1);
 				count++;
 			}
-			else{
-				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
-			}
-		
+//			else{
+//				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
+//			}
+			if(!prediction.containsKey(key))
+				prediction.put(key, 1);
+			else
+				prediction.put(key, prediction.get(key)+1);
 		}
 		else{
 			int testAttr = root.getTestAttribute();
@@ -106,18 +110,27 @@ public class ID3 {
 	}
 	
 	//Function to Print the Tree
-	public static void printTree(TreeNode root){
-		
+	public static void printTree(TreeNode root, int height){
+		if(root.isLeaf())
+			height--;
+		for(int i = 0; i<height; i++){
+			System.out.print("|");
+			System.out.print("\t");
+		}
 		if(!root.isLeaf()){
 			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
+			printTree(root.getChildren()[0], height+1);
+			
+			for(int i = 0; i<height; i++){
+				System.out.print("|");
+				System.out.print("\t");
+			}
 			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
-			printTree(root.getChildren()[0]);
-			printTree(root.getChildren()[1]);
+			printTree(root.getChildren()[1], height+1);
 		}
 		else{
-			System.out.println("Leaf for :"+getLableName(root.getParent().getTestAttribute())+" : "+root.getRecords().size()+" classes for "+root.getLeafAttribute());
+			System.out.print("--> Leaf : "+root.getLeafAttribute()+"\n");
 		}
-
 		return;
 	}
 	
