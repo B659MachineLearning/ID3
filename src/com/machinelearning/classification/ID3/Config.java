@@ -1,4 +1,12 @@
 package com.machinelearning.classification.ID3;
+
+/*
+ * Authors : Aniket Bhosale and Mayur Tare
+ * 
+ * Description :
+ * Class to read config values from configuration file
+ */
+
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -9,7 +17,7 @@ public class Config {
 	public static void initialize() {
 		config = new Properties();
 		try {
-			config.load(new FileInputStream("./config/config.properties"));
+			config.load(new FileInputStream("config.properties"));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
