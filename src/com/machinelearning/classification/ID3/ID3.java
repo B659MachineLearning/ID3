@@ -70,7 +70,7 @@ public class ID3 {
 		System.out.println("Test Report : ");
 		System.out.println("======================================");
 		System.out.println(count+" Correct predictions out of "+test_records.size());
-		System.out.println("Prediction : "+prediction.toString());
+		System.out.println("Correct Prediction breakdown : "+prediction.toString());
 		System.out.println("======================================");
 		double accuracy = ((double)count/(double)test_records.size())*100;
 		System.out.println("Accuracy for Depth "+depth+" : "+accuracy+"%");
@@ -85,14 +85,18 @@ public class ID3 {
 			int key = Integer.parseInt(r.get(indexOfClassLabel));
 			if(key == Integer.parseInt(root.getLeafAttribute())){
 				count++;
+				if(!prediction.containsKey(key))
+					prediction.put(key, 1);
+				else
+					prediction.put(key, prediction.get(key)+1);
+			}
+			else{
+				if(!prediction.containsKey(key))
+					prediction.put(key, 0);
 			}
 //			else{
 //				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
 //			}
-			if(!prediction.containsKey(key))
-				prediction.put(key, 1);
-			else
-				prediction.put(key, prediction.get(key)+1);
 		}
 		else{
 			int testAttr = root.getTestAttribute();
