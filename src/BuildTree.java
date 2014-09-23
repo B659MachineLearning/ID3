@@ -25,6 +25,7 @@ public class BuildTree {
 			}
 			else{
 				System.out.println("0 records classified for :"+root.getParent());
+				
 			}
 			//debug
 			//System.out.println("Leaf Node with parent: "+DataLoader.labels.get(root.getParent().getTestAttribute())+" and Value : "+root.getRecords().get(0).get(root.getParent().getTestAttribute())+" "+root.getRecords().size()+" is : "+root.getLeafAttribute()[root.getTestValue()]);
@@ -151,8 +152,8 @@ public class BuildTree {
 		//debug
 		System.out.println("=============================================================");
 		System.out.println("Best Gain:"+bestGain);
-		System.out.println("Best Attribute:"+bestAttribute);
-		System.out.println("Attribute Name:"+DataLoader.labels.get(bestAttribute));
+		//System.out.println("Best Attribute:"+ID3.getLableName(bestAttribute));
+		//System.out.println("Attribute Name:"+DataLoader.labels.get(bestAttribute));
 		System.out.println("Test value = "+currBest);
 		System.out.println("=============================================================");
 		

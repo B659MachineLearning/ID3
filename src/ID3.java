@@ -118,7 +118,7 @@ public class ID3 {
 		
 		String key;		
 		
-		if(root.getChildren() != null){
+		if(root.getChildren() != null && root.getTestAttribute() != -1){
 			assignLeaves(root.getChildren()[0]);
 			assignLeaves(root.getChildren()[1]);
 		}
@@ -126,6 +126,11 @@ public class ID3 {
 			//System.out.println("Branch : "+root.getTestValue());
 			HashMap<String, Integer> counts = new HashMap<String, Integer>();
 			ArrayList<ArrayList<String>> records = root.getRecords();
+			TreeNode test = root.getParent();
+			while(records.size() == 0){
+				records = test.getRecords();
+				test = test.getParent();
+			}
 			if(!records.isEmpty()){
 				for(int j = 0; j<records.size(); j++){
 					key = records.get(j).get(indexOfClassLabel);
