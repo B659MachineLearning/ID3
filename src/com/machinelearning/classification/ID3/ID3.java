@@ -91,12 +91,10 @@ public class ID3 {
 					prediction.put(key, prediction.get(key)+1);
 			}
 			else{
+				//System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
 				if(!prediction.containsKey(key))
 					prediction.put(key, 0);
 			}
-//			else{
-//				System.out.println("Incorrect Prediction for "+r.toString()+" --> "+root.getLeafAttribute());
-//			}
 		}
 		else{
 			int testAttr = root.getTestAttribute();
