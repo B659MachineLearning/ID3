@@ -115,23 +115,33 @@ public class ID3 {
 	public static void printTree(TreeNode root, int height){
 		if(root.isLeaf())
 			height--;
-		for(int i = 0; i<height; i++){
-			System.out.print("|");
-			System.out.print("   ");
+		else{
+			for(int i = 0; i<height; i++){
+				System.out.print("|");
+				System.out.print("   ");
+			}
 		}
 		if(!root.isLeaf()){
-			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
+			if(root.getChildren()[0].isLeaf())
+				System.out.print(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
+			else{
+				System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
+			}	
 			printTree(root.getChildren()[0], height+1);
 			
 			for(int i = 0; i<height; i++){
 				System.out.print("|");
 				System.out.print("   ");
-			}
-			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
+			}			
+			
+			if(root.getChildren()[1].isLeaf())
+				System.out.print(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
+			else
+				System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
 			printTree(root.getChildren()[1], height+1);
 		}
 		else{
-			System.out.print("--> Leaf : "+root.getLeafAttribute()+"\n");
+			System.out.print(" --> Leaf : "+root.getLeafAttribute()+"\n");
 		}
 		return;
 	}
