@@ -117,7 +117,7 @@ public class ID3 {
 			height--;
 		for(int i = 0; i<height; i++){
 			System.out.print("|");
-			System.out.print("\t");
+			System.out.print("   ");
 		}
 		if(!root.isLeaf()){
 			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[0]);
@@ -125,7 +125,7 @@ public class ID3 {
 			
 			for(int i = 0; i<height; i++){
 				System.out.print("|");
-				System.out.print("\t");
+				System.out.print("   ");
 			}
 			System.out.println(getLableName(root.getTestAttribute())+" = "+root.getTestValue()[1]);
 			printTree(root.getChildren()[1], height+1);
